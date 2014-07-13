@@ -1,7 +1,15 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Ruby on Rails Tutorial Sample App | <%= yield(:title) %></title>
+
+<%
+=begin %>  
+  <title><%= full_title(yield(:title)) %></title>
+  The line above was used for Chapter 4 to REMOVE page-specific titles by defining full_title and page_title
+<%
+=end %>
+
+  <title><%= full_title(yield(:page_title)) %></title>
   <%= stylesheet_link_tag    "application", media: "all",
                                             "data-turbolinks-track" => true %>
   <%= javascript_include_tag "application", "data-turbolinks-track" => true %>
