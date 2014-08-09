@@ -35,7 +35,7 @@ describe User do
 
   describe "when email format is invalid" do
   	it "should be invalid" do
-  		addresses = %w[a@example,com b_at_example.com c.d@example@example_.com e@example+example.com]
+  		addresses = %w[a@example,com b_at_example.com c.d@example@example_.com e@example+example.com, foobar@example..com]
   		addresses.each do |invalid_address|
   			@user.email = invalid_address
   			expect(@user).not_to be_valid
@@ -63,6 +63,7 @@ describe User do
   end
 
   describe "when email address is already taken" do
+    #checks for duplicate email addresses that are not case-sensitive
     before do
       user_with_same_email = @user.dup
       user_with_same_email.email = @user.email.upcase
@@ -70,6 +71,17 @@ describe User do
     end
 
     it { should_not be_valid }
+  end
+
+  describe "email address with mixed case" do
+    let(:mixed_case_email) { "Foo@ExAMPle.CoM" }
+
+    it "should be saved as all lowercase" do
+      @user.email = mixed_case_email
+      @user.save
+      expect(@user.reload.email).to eq mixed_case_email.downcase
+      #tests the before_save line in the user.rb model file
+    end
   end
 
   describe "when password is not present" do
